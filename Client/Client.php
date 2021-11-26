@@ -173,7 +173,7 @@ class Client
         $this->authenticationStrategy->authenticate($request);
 
         $response = $this->request($request);
-        if (200 !== $response->getStatus()) {
+        if (200 !== $response->getStatusCode()) {
             throw new CommunicationException('The API request was not successful (Status: '.$response->getStatus().'): '.$response->getContent());
         }
 

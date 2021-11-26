@@ -3,6 +3,7 @@
 namespace JMS\Payment\PaypalBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /*
  * Copyright 2011 Johannes M. Schmitt <schmittjoh@gmail.com>
@@ -20,14 +21,21 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  * limitations under the License.
  */
 
-class Configuration
+class Configuration implements ConfigurationInterface
 {
-    public function getConfigTree()
-    {
-        $tb = new TreeBuilder();
+    private string $alias;
 
-        return $tb
-            ->root('jms_payment_paypal', 'array')
+    public function __construct(string $alias)
+    {
+        $this->alias = $alias;
+    }
+
+    public function getConfigTreeBuilder()
+    {
+        $tb = new TreeBuilder($this->alias, 'array');
+
+        $tb
+            ->getRootNode()
                 ->children()
                     ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
@@ -37,8 +45,8 @@ class Configuration
                     ->scalarNode('notify_url')->defaultNull()->end()
                     ->scalarNode('useraction')->defaultNull()->end()
                     ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
-                ->end()
-            ->end()
-            ->buildTree();
+                ->end();
+
+        return $tb;
     }
 }
