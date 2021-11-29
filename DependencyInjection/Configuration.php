@@ -23,7 +23,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    private string $alias;
+    private $alias;
 
     public function __construct(string $alias)
     {
